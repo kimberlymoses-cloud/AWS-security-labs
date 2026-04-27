@@ -1,0 +1,31 @@
+# AWS Translate Book
+
+## Business Problem
+Publishing client needed to translate 50K word manuscript from English to Spanish.
+Manual translation quote: $5,000 + 6 weeks.
+Needed faster, cheaper MVP for market testing.
+
+## Solution Architecture
+Amazon Translate: Formality = Formal for book tone
+Posted-edited output for publishing quality
+
+## Security + Considerations
+Data Classification: Treated manuscript as confidential
+Compliance: Discussed with client that AWS Translate doesn't train on customer data
+
+## Results
+Cost: $2 vs $5,000 quote = 99% savings
+Time: 1 hour vs 6 weeks
+Outcome: Client approved Spanish edition for release
+
+## Architecture Diagram
+
+
+## Lesson Learned
+1. Amazon Translate handles large docs better with .txt vs .docx formatting
+2. Custom terminology: With Custom Terminology, you can override the standard neural machine translation by uploading CSV, TSV,  or TMX files. 
+3. Brevity: If you need a shortened translation to define a product description or label without losing your core message, enable this setting.
+4. Formality: This feature lets you set the tone of your text. You can use formal or informal language depending on your audience: professional, business casual, or friendly interaction. 
+5. Profanity masking: If you want a safety feature to prevent profanity, make sure it is enabled.
+6. Batch jobs in Amazon Translate are asynchronous, long-running operations that translate large volumes of text or documents (up to 5 GB per job) stored in Amazon S3, rather than providing real-time translation.
+7. Always add human review - AI misses idioms and context.
