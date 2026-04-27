@@ -26,15 +26,11 @@ Outcome: Client approved Spanish edition for release
 
 <img width="2048" height="1154" alt="Image" src="https://github.com/user-attachments/assets/51db32eb-0cf6-444c-aadd-abf96d1dad6a" />
 
-
-
-
-
 ![AWS Translate InDesign Workflow](./indesign.png)
 
-![AWS Translate Feature Settings](https://raw.githubusercontent.com/kimberlymoses-cloud/AWS-security-labs/35d141706f71ce41f5fa1c88bcb4c0cde4093c8b/aws-translate-features.png)
+![AWS Translate Feature Settings](https://raw.githubusercontent.com/kimberlymoses-cloud/AWS-security-labs/main/aws-translate-features.png)
 
-![AWS Translate Architecture](https://raw.githubusercontent.com/kimberlymoses-cloud/AWS-security-labs/33324d866b11a24e84fc3fe3c5090ae5dad27fa7/aws-translate-features.png)
+![AWS Translate Architecture](https://raw.githubusercontent.com/kimberlymoses-cloud/AWS-security-labs/main/aws-translate-features.png)
 
 ## Lesson Learned
 1. Amazon Translate handles large docs better with .txt vs .docx formatting
