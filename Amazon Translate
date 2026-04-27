@@ -19,7 +19,8 @@ Time: 1 hour vs 6 weeks
 Outcome: Client approved Spanish edition for release
 
 ## Architecture Diagram
-![image alt](https://github.com/kimberlymoses-cloud/AWS-security-labs/blob/e47e423763a794e305b9b6f1f82fcc46b2a33f61/image.png)
+
+![image alt](https://github.com/kimberlymoses-cloud/AWS-security-labs/blob/5020fd716807a37f00c53e371d34798b16893f01/image.png)
 
 ## Lesson Learned
 1. Amazon Translate handles large docs better with .txt vs .docx formatting
