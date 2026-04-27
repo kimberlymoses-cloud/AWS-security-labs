@@ -1,0 +1,69 @@
+# Serverless Media Processing Pipeline on AWS
+
+## Business Problem
+Global digital news org needed to ingest and process 10K+ media files/day from mobile reporters worldwide. Legacy EC2 solution couldn't handle spikes and cost $8K/month idle. Required <5 min processing time and 99.9% durability.
+
+## Architecture Overview
+Event-driven, serverless architecture for scalable media ingestion, validation, and processing. Decoupled with SQS + Step Functions for resilience.
+
+![Architecture Diagram](./event driven media.png)
+   graph TD
+   Client[Web/Mobile] --> APIGW[API Gateway] --> Lambda[Lambda: Validate]
+   Lambda --> SQS[SQS Queue] --> SFN[Step Functions]
+   SFN --> S3[S3: Media]
+   SFN --> DDB[DynamoDB: Metadata]
+   SFN --> SNS[SNS: Notify]
+
+## Core AWS Services
+| Service | Purpose |
+| --- | --- |
+| API Gateway | REST endpoint for web/mobile clients to upload media + metadata |
+| AWS Lambda | Validates uploads, extracts metadata, enqueues jobs. Scales to zero |
+| Amazon SQS | Decouples ingestion from processing. Buffers traffic spikes |
+| AWS Step Functions | Orchestrates multi-step media workflows: transcoding, resizing, audio |
+| Amazon S3 | Stores raw + processed media assets. 11 9s durability |
+| Amazon DynamoDB | Stores metadata, job status, pointers to S3 objects |
+| Amazon CloudWatch | Logs, metrics, alarms for pipeline health |
+| Amazon SNS | Push notifications to stakeholders when processing completes/fails |
+
+## Data Flow
+1. Web/Mobile Client → API Gateway uploads media + metadata
+2. Lambda validates file type/size → puts message in SQS Processing Queue
+3. SQS triggers Step Functions workflow asynchronously
+4. Step Functions orchestrates: Video Transcoding, Image Resizing, Audio Processing
+5. Processed media → S3, metadata → DynamoDB
+6. CloudWatch monitors all steps. SNS notifies stakeholders on completion
+
+## Scalability + Cost Features
+1. Zero Idle Cost: Lambda/SQS/Step Functions = pay-per-request only
+2. Auto-Scale: Handles 1 file or 100K files with no capacity planning
+3. Decoupled: If transcoding fails, SQS retains message for retry. Ingestion unaffected
+4. Durability: S3 11 9s + DynamoDB multi-AZ + SQS at-least-once delivery
+
+## Security + Considerations
+- IAM: Lambda execution role with least-privilege S3/DynamoDB access
+- API Auth: API Gateway uses Cognito or Lambda Authorizers for mobile clients
+- Encryption: S3 + DynamoDB encrypted at rest, HTTPS in transit
+- DLQ: SQS Dead-Letter Queue for failed messages → CloudWatch Alarm
+- Cost Control: S3 Lifecycle → Glacier for old media, Lambda reserved concurrency
+
+## Results
+- Cost: $400/month vs $8K/month EC2 = 95% savings
+- Performance: Avg processing time 90 seconds for 1080p video
+- Scale: Tested to 5K concurrent uploads via API Gateway throttling
+- Reliability: 99.95% success rate with automatic retries via Step Functions
+
+## Lesson Learned
+1. Lambda 15-min timeout = chunk large videos or use Fargate for >15 min jobs
+2. SQS visibility timeout must be > Step Function workflow time or you get dupes
+3. Step Functions Express Workflows for >10K executions/day to save cost
+4. Pre-signed S3 URLs let mobile clients upload direct to S3, bypassing API Gateway 10MB limit
+5. DynamoDB streams → Lambda for real-time dashboards without polling
+6. Amazon API Gateway exposes secure Restful endpoints for journalists and editors to upload media, submit metadata, and initate processing workflow from web or mobile apps.
+7. Incoming API requests trigger AWS Lambda functions that handle tasks such as validating file uploads, extracting metadata, tagging content, and routing jobs to processing components.
+8. Amazon DynamoDB stores media metadata (e.g., titles, tags, contributor info status), using Global Secondary Indexes (GSIs) to support editorial queries across region, category, or publish status.
+9. Amazon SQS decouples processing steps - for instance, a Lambda function sends a message to a queue after an upload is validated and another Lambda function later picks up the message to trigger media transcoding or image resizing workloads. 
+10. Amazon SNS is used to notify stakeholders when media assets are ready for review, published, or distributed to partner platforms (e.g., mobile apps, email channels, syndication services). 
+11. AWS Step Functions orchestate multi-step processing workflows such as ingest > transcode > compress > tag > notify, ensuring resiliency, auditability and built in retries for failed steps. 
+12. Amazon CloudWatch aggregates logs and metrics from all Lambda functions and workflows, allowing the newsroom tech team to monitor media processing throughput, sucess rates, and performance bottlenecks.
+IAM roles enforce least-priviledge access for each Lambda function ensuring scoped permissions to only the service needed (e.g., write to DynamoDB, publish to SNS, or read from S3.)
