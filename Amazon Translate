@@ -24,6 +24,8 @@ Outcome: Client approved Spanish edition for release
 
 ![image alt](https://github.com/kimberlymoses-cloud/AWS-security-labs/blob/be2ccb1026ae8c9c82c6685eb355775bf14b2f12/image%20(1).png)
 
+![image alt](https://github.com/kimberlymoses-cloud/AWS-security-labs/blob/1ad214c0ea534ac3951e4e98ef47cc13f43532f0/image%20(2).png)
+
 ## Lesson Learned
 1. Amazon Translate handles large docs better with .txt vs .docx formatting
 2. Custom terminology: With Custom Terminology, you can override the standard neural machine translation by uploading CSV, TSV,  or TMX files. 
