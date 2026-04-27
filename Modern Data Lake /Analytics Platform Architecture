@@ -1,0 +1,54 @@
+# Modern Data Lake on AWS for Field Sensor Analytics
+
+## Business Problem
+Agriculture client needed to ingest 500GB/day from IoT field sensors, data partners, and manual CSV uploads. Legacy on-prem SQL Server couldn't scale. Needed self-service BI for analysts + cost <$1K/month.
+
+## Architecture Overview
+S3-based data lake with serverless ETL and analytics. Separates storage from compute for cost optimization.
+
+![Architecture Diagram](./data lakes.png)
+
+## Core AWS Services
+| Service | Purpose |
+| --- | --- |
+| Amazon S3 | Data lake storage. Raw zone, processed zone, curated zone |
+| AWS Glue | Crawls S3 to build Data Catalog. Runs Spark ETL jobs |
+| AWS Batch | Heavy lifting: daily aggregation, ML feature engineering |
+| Amazon Athena | Serverless SQL queries on S3. Analysts run ad-hoc queries |
+| Amazon Redshift | Data warehouse for sub-second BI dashboards |
+| Amazon QuickSight | BI dashboards for execs. Embedded in internal portal |
+| AWS Lake Formation | Fine-grained column/row permissions on S3 + Glue tables |
+| AWS IAM + KMS | Role-based access + S3 encryption at rest |
+| AWS Config | Audits S3 bucket policies for compliance |
+
+## Data Flow
+1. Data Sources → S3 Raw Bucket: Manual uploads, partners via SFTP, sensors via Kinesis Firehose
+2. Glue Crawler → discovers schema → Glue Data Catalog
+3. Glue ETL Jobs + AWS Batch → clean/aggregate → S3 Processed Bucket
+4. Athena queries S3 directly for data scientists. Redshift Spectrum queries S3 for BI
+5. QuickSight dashboards pull from Athena/Redshift → executives view KPIs
+
+## Security + Governance Features
+1. Lake Formation: Grant SELECT on `sensor_readings` table to `analysts` group only
+2. S3 Encryption: All buckets SSE-KMS. Bucket policies deny unencrypted uploads
+3. IAM Roles: Glue jobs assume `GlueETLRole`, Athena users assume `AnalystRole`
+4. Config Rules: `s3-bucket-public-read-prohibited` ensures no data leaks
+5. Data Lineage: Glue tracks job runs → know what transformed which dataset
+
+## Results
+- Cost: $600/month vs $12K/month on-prem SQL cluster = 95% savings
+- Scale: Ingests 500GB/day → 15TB/month with zero capacity planning
+- Speed: Analysts query 1 year of data in Athena in <30s vs 4 hours before
+- Self-Service: 20 business users build own QuickSight dashboards without IT
+
+## Lesson Learned
+1. Partition S3 by `year=/month=/day=` or Athena queries will scan everything = $$$
+2. Use Glue Workflows to chain crawlers + ETL. Don’t run them manually
+3. Redshift Spectrum is cheaper than loading all data into Redshift for cold queries
+4. Lake Formation permissions override S3 bucket policies - test carefully
+5. QuickSight SPICE imports data for <1s dashboards, but costs extra vs direct query
+6. Amazon Athena provides interactive SQL queries across datasets in S3, including those produced by both Glue ETL jobs and Amazon Batch pipelines.
+7. Amazon Redshift optionally integrates for high performace SQL analytics and joins across structured research datasets. It can federate with S3 using Redshift Spectrum for unified access.
+8. Amazon QuickSight delivers visual dashboards for researchers and program
+
+
