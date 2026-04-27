@@ -20,7 +20,7 @@ Outcome: Client approved Spanish edition for release
 
 ## Architecture Diagram
 
-![image alt](image.png)
+![image alt](https://github.com/kimberlymoses-cloud/AWS-security-labs/blob/7d90695c5d586649bd6cd16b8af967e313ca8b11/image.png)
 
 ## Lesson Learned
 1. Amazon Translate handles large docs better with .txt vs .docx formatting
