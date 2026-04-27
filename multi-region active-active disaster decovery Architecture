@@ -1,0 +1,53 @@
+# Multi-Region Active-Active Web App on AWS
+
+## Business Problem
+Needed global application with < 1 min RTO, < 5 min RPO. Single-region deployment risked downtime during regional AWS outages.
+
+## Architecture Overview
+Multi-region active-active architecture serving global users with automated failover.
+
+![Architecture Diagram](./disaster-recovery.png)
+
+## Core AWS Services
+| Service | Purpose |
+| --- | --- |
+| Route 53 | DNS routing + health checks for region failover |
+| CloudFront | Global CDN + edge caching, routes to nearest region |
+| Application Load Balancer | Distributes traffic within each region to Fargate |
+| AWS Fargate | Serverless containers running application code |
+| Amazon Aurora Global | Multi-region database with <1s replication lag |
+| ElastiCache for Redis | In-memory caching to reduce DB reads |
+| Amazon S3 CRR | Cross-region replication for static assets/user uploads |
+| CloudWatch | Monitoring, logs, alarms across all regions |
+| App Recovery Controller | Readiness checks + automated DNS failover |
+
+## Data Flow
+1. Users → Route 53 performs latency-based routing
+2. CloudFront serves cached content or forwards to ALB in healthy region
+3. ALB → Fargate containers handle business logic
+4. Fargate reads/writes to Aurora Global Writer or local Read Replica
+5. S3 CRR + Aurora Global replicate data cross-region automatically
+
+## High Availability Features
+1. Multi-AZ: Each region deployed across 2+ Availability Zones
+2. Cross-Region Failover**: Route 53 + ARC failover if entire region fails
+3. Data Durability: Aurora Global + S3 CRR = 99.999999999% durability
+4. Zero-downtime deploys: Fargate + ALB rolling updates
+
+## Security + Considerations
+- IAM: Least-privilege roles for Fargate tasks
+- Encryption: S3 + Aurora encrypted at rest, TLS in transit
+- Compliance: Data residency met by choosing specific regions
+- Cos*: Active-active doubles compute cost but reduces downtime risk
+
+## Results
+- RTO: < 60 seconds via automated failover
+- RPO: < 5 seconds with Aurora Global Database  
+- Latency: < 100ms globally via CloudFront edge locations
+- Uptime SLA: 99.99%
+
+## Lesson Learned
+1. Aurora Global Writer only lives in 1 region - writes must route there
+2. ElastiCache doesn't auto-replicate cross-region - need app-level logic
+3. Test failover quarterly with ARC - DNS changes take time to propagate
+4. CloudFront origin failover is faster than Route 53 for static content
