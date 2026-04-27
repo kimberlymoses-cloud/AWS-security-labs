@@ -20,11 +20,11 @@ Outcome: Client approved Spanish edition for release
 
 ## Architecture Diagram
 
-![AWS Translate Architecture Diagram](https://raw.githubusercontent.com/kimberlymoses-cloud/AWS-security-labs/blob/fa4afc6fa3275edbc910dffa7dc1202fcf5028d5/indesign.png)
+![AWS Translate Architecture Diagram](https://raw.githubusercontent.com/kimberlymoses-cloud/AWS-security-labs/fa4afc6fa3275edbc910dffa7dc1202fcf5028d5/indesign.png)
 
-![AWS Translate Architecture Diagram](https://raw.githubusercontent.com/kimberlymoses-cloud/AWS-security-labs/blob/35d141706f71ce41f5fa1c88bcb4c0cde4093c8b/aws-translate-features.png)
+![AWS Translate Architecture Diagram](https://raw.githubusercontent.com/kimberlymoses-cloud/AWS-security-labs/35d141706f71ce41f5fa1c88bcb4c0cde4093c8b/aws-translate-features.png)
 
-![AWS Translate Architecture Diagram](https://raw.githubusercontent.com/kimberlymoses-cloud/AWS-security-labs/blob/52e859ddc6fd1dfec3b8420dd24fe73e866e64a8/aws-translate-example.png)
+![AWS Translate Architecture Diagram](https://raw.githubusercontent.com/kimberlymoses-cloud/AWS-security-labs/52e859ddc6fd1dfec3b8420dd24fe73e866e64a8/aws-translate-example.png)
 
 ## Lesson Learned
 1. Amazon Translate handles large docs better with .txt vs .docx formatting
