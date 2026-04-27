@@ -7,6 +7,8 @@ Needed global application with < 1 min RTO, < 5 min RPO. Single-region deploymen
 Multi-region active-active architecture serving global users with automated failover.
 
 ![Architecture Diagram](./disaster-recovery.png)
+   graph LR
+   Users --> Route53 --> CloudFront --> ALB --> Fargate --> Aurora
 
 ## Core AWS Services
 | Service | Purpose |
@@ -51,3 +53,11 @@ Multi-region active-active architecture serving global users with automated fail
 2. ElastiCache doesn't auto-replicate cross-region - need app-level logic
 3. Test failover quarterly with ARC - DNS changes take time to propagate
 4. CloudFront origin failover is faster than Route 53 for static content
+5. Amazon Route 53 uses latency based routing with health checks to direct users to the nearest healthy regional endpoint, minimizing startup and buffering delays for video playback.
+6. Each region hosts a Fargate-based Amazon ECS cluser behind an application load balancer, which serves back end APIs for user authentication, playback metadata, and content recommendations. This infrastructure scales in and out automatically based on user demand. 
+7. Amazon Aurora Global Database stores user profiles, watch history, and preferences with an active writer in the us-east-1 and read replicas in other global regions to support fast, localized read access.
+8. Amazon Cloudfront accelerates delivery of static assests(e.g., thumbnails, JS/CSS, video player code) and API calls across the globe for optimal performance. 
+9. Amazon Elasticache for Red provides ultra fast session caching to keep track of user playback position, personalized queues, and recommendations.
+10. Amazon S3 Cross-Region Replication ensures that all video assests like trailers, thumbnails, and auxillary media are available near the user, regardless of which region they are in. 
+11. AWS Application Recovery Controller (ARC) manages regional fail-over using rouing controls and readiness checks to shift user traffic quickly to the backup region without requiring manual intervention. 
+12. Amazon Cloud Watch continously monitors backend services, playback API latency and regional resource utilization, triggering alerts and automated scaling policies as needed to ensure smooth viewing experiences even during traffic surges.
