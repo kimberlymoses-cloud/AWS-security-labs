@@ -7,6 +7,12 @@ Agriculture client needed to ingest 500GB/day from IoT field sensors, data partn
 S3-based data lake with serverless ETL and analytics. Separates storage from compute for cost optimization.
 
 ![Architecture Diagram](./data lakes.png)
+   graph TD
+   DS[Data Sources] --> S3[S3 Data Lake]
+   S3 --> Glue[AWS Glue ETL]
+   S3 --> Batch[AWS Batch]
+   S3 --> Athena[Athena] --> QS[QuickSight]
+   S3 --> Redshift[Redshift] --> QS
 
 ## Core AWS Services
 | Service | Purpose |
@@ -49,6 +55,14 @@ S3-based data lake with serverless ETL and analytics. Separates storage from com
 5. QuickSight SPICE imports data for <1s dashboards, but costs extra vs direct query
 6. Amazon Athena provides interactive SQL queries across datasets in S3, including those produced by both Glue ETL jobs and Amazon Batch pipelines.
 7. Amazon Redshift optionally integrates for high performace SQL analytics and joins across structured research datasets. It can federate with S3 using Redshift Spectrum for unified access.
-8. Amazon QuickSight delivers visual dashboards for researchers and program
+8. Amazon QuickSight delivers visual dashboards for researchers and program managers, connecting to both Athena and Redshift to visualize trends and distributions, and anomalies.
+9. AWS Lake Formation enforces fine-grained access control, ensuring only authorized researchers or departments can access specific data subsets based on project or sensitivity.
+10. AWS KMS ensures data-at-rest encryption across S3, Glue, Redshift, and Batch outputs. IAM and AWS Config are used to enforce compliance with institutional data goverance policies and track configuration drift or unauthorized access.
+11. Amazon S3 serves as the central data lake, storing raw, intermediate, and processed datasets in separate prefixes (e.g., /raw/,/transformed/,/analytics/). Large research datasets are ingested directly from field sensors, data partners, or upload tools.
+12. AWS Glue is used to define ETL pipelines, which crawl and catalog new data into the AWS Glue Data Catalog, and transform semi-structured datasets into analytics-ready formats like Parquet.
+13. Amazon Batch is used for heavy data transformation workloads that require processing at scale - such as image pre-processing, climate model computation, or large CSV-to-columnar format conversions. Batch jobs are triggered automatically by S3 events or Glue workflows and output their results back into the data lake.  
+14. Amazon Athena provides interactive SQL queries across datasets in S3, including those produced by both Glue ETL jobs and Amazon Batch pipelines. 
+15. Amazon Redshift optionally integrates for high-performance SQL analytics and joins across structured research datasets. It can federate with S3 using Redshift Spectrum for unified access.
+16. Amazon QuickSight delivers visual dashboards for researchers and program managers, connecting to both Athena and Redshift to visualize trends, distributions, and anomalies.
 
 
