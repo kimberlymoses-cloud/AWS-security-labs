@@ -9,3 +9,8 @@ Hands-on AWS security projects and labs covering IAM, S3 encryption, VPC securit
 [image alt](https://github.com/kimberlymoses-cloud/AWS-security-labs/blob/c28d33d844e950252044d35b0a6f6e5913cf0bda/multi-tier%20vpc.png)
 
 **Serverless, Event-Driven Media**
+[image alt](https://github.com/kimberlymoses-cloud/AWS-security-labs/blob/706359024426793d80441ef7c9564325be0ebbc4/event%20driven%20media.png)
+
+**Modern Data Lake**
+
+** **
