@@ -17,36 +17,36 @@ Hybrid cloud architecture extending corporate data center to AWS using Direct Co
 ## Core AWS Services
 | Service | Purpose |
 | --- | --- |
-| AWS Direct Connect | Dedicated 10Gbps private connection to AWS for low latency |
-| Site-to-Site VPN | Encrypted IPSec tunnel backup if Direct Connect fails |
-| AWS Transit Gateway | Central network hub routing between on-prem + VPC |
-| VPC Public/Private Subnets | Network isolation: web tier public, app/data tier private |
-| NAT Gateway | Allows private subnet resources to reach internet for patches |
-| Amazon RDS | Managed database isolated in private subnet |
-| Amazon S3 + Glacier | Hot + cold storage tiering. CRR to 2nd region for DR |
-| S3 File Gateway | On-prem servers mount S3 as NFS/SMB for seamless file access |
-| EC2 (Burst) | Auto-scaled compute for batch jobs when on-prem is maxed |
-| CloudWatch + CloudTrail | Logging, metrics, API auditing across hybrid env |
+| **AWS Direct Connect** | Dedicated 10Gbps private connection to AWS for low latency |
+| **Site-to-Site VPN** | Encrypted IPSec tunnel backup if Direct Connect fails |
+| **AWS Transit Gateway** | Central network hub routing between on-prem + VPC |
+| **VPC Public/Private Subnets** | Network isolation: web tier public, app/data tier private |
+| **NAT Gateway** | Allows private subnet resources to reach internet for patches |
+| **Amazon RDS** | Managed database isolated in private subnet |
+| **Amazon S3 + Glacier** | Hot + cold storage tiering. CRR to 2nd region for DR |
+| **S3 File Gateway** | On-prem servers mount S3 as NFS/SMB for seamless file access |
+| **EC2 (Burst)** | Auto-scaled compute for batch jobs when on-prem is maxed |
+| **CloudWatch + CloudTrail** | Logging, metrics, API auditing across hybrid env |
 
 ## Data Flow
-1. On-Prem Users/Apps → Direct Connect or VPN → Transit Gateway
-2. Transit Gateway → routes to Public Subnet Web Server or Private Subnet
-3. Processing Node in private subnet pulls jobs → writes to RDS + S3 Standard
-4. S3 Lifecycle moves old data → S3 Glacier Flexible Retrieval for 90% cost savings
-5. On-Prem Servers → S3 File Gateway → sync files directly to S3 without app changes
+1. **On-Prem Users/Apps** → Direct Connect or VPN → Transit Gateway
+2. **Transit Gateway** → routes to Public Subnet Web Server or Private Subnet
+3. **Processing Node** in private subnet pulls jobs → writes to RDS + S3 Standard
+4. **S3 Lifecycle moves old data** → S3 Glacier Flexible Retrieval for 90% cost savings
+5. **On-Prem Servers** → S3 File Gateway → sync files directly to S3 without app changes
 
 ## High Availability + Security Features
-1. Redundant Connectivity: Direct Connect + VPN automatic failover via Transit Gateway
-2. Network Isolation: Private subnet has no internet gateway. All egress via NAT Gateway
-3. Data Encryption: In-transit via IPSec VPN, at-rest via S3 + RDS encryption
-4. IAM + SCP: Organizations Service Control Policies prevent privilege escalation
-5. Audit Trail: CloudTrail logs all API calls from on-prem and AWS
+1. **Redundant Connectivity**: Direct Connect + VPN automatic failover via Transit Gateway
+2. **Network Isolation**: Private subnet has no internet gateway. All egress via NAT Gateway
+3. **Data Encryption**: In-transit via IPSec VPN, at-rest via S3 + RDS encryption
+4. **IAM + SCP**: Organizations Service Control Policies prevent privilege escalation
+5. **Audit Trail**: CloudTrail logs all API calls from on-prem and AWS
 
 ## Results
-- Cost: Avoided $200K on-prem hardware refresh by bursting to EC2
-- Performance: 10Gbps Direct Connect = <5ms latency to AWS
-- Storage Savings: 70% reduction using S3 Glacier vs on-prem SAN
-- Compliance: Maintained data residency with hybrid model
+- **Cost**: Avoided $200K on-prem hardware refresh by bursting to EC2
+- **Performance**: 10Gbps Direct Connect = <5ms latency to AWS
+- **Storage Savings**: 70% reduction using S3 Glacier vs on-prem SAN
+- **Compliance**: Maintained data residency with hybrid model
 
 ## Lesson Learned
 1. Transit Gateway saves $$$ vs VPC Peering at scale - centralizes routing
