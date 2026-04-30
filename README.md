@@ -14,4 +14,5 @@ Hands-on AWS security projects and labs covering IAM, S3 encryption, VPC securit
 **Modern Data Lake**
 [image alt](https://github.com/kimberlymoses-cloud/AWS-security-labs/blob/18fbaafc7af564b5d0d5ab42a6002dd216d47647/data%20lakes.png)
 
-**Multi-region active-active disaster decovery Architecture **
+**Multi-region active-active disaster decovery Architecture**
+[image alt](https://github.com/kimberlymoses-cloud/AWS-security-labs/blob/802a5d0c2f2da18fa4ff25ddb9bf5823491f7a1f/disaster-recovery.png)
