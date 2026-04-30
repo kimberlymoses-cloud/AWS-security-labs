@@ -6,3 +6,6 @@ Hands-on AWS security projects and labs covering IAM, S3 encryption, VPC securit
 [image alt](https://github.com/kimberlymoses-cloud/AWS-security-labs/blob/ae8fb1883b2cd8d7722d837ae83757506d7bf559/aws-translate-features.png)
 
 **Hybrid Cloud Architecture with Multi-Tier VPC**
+[image alt](https://github.com/kimberlymoses-cloud/AWS-security-labs/blob/c28d33d844e950252044d35b0a6f6e5913cf0bda/multi-tier%20vpc.png)
+
+**Serverless, Event-Driven Media**
