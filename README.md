@@ -12,5 +12,6 @@ Hands-on AWS security projects and labs covering IAM, S3 encryption, VPC securit
 [image alt](https://github.com/kimberlymoses-cloud/AWS-security-labs/blob/706359024426793d80441ef7c9564325be0ebbc4/event%20driven%20media.png)
 
 **Modern Data Lake**
+[image alt](https://github.com/kimberlymoses-cloud/AWS-security-labs/blob/18fbaafc7af564b5d0d5ab42a6002dd216d47647/data%20lakes.png)
 
 ** **
